@@ -1,0 +1,44 @@
+# Configuração global
+output:
+  format: "markdown" # Pode ser: html, markdown, json, yaml
+  path: "./docs" # Diretório onde a documentação será gerada
+
+# Configuração para documentação Go
+golang:
+  enabled: true
+  report_level: "short"
+  report_options:
+    show_imports: false
+    show_internal_funcs: true
+    show_tests: false
+    show_examples: true
+  paths:
+    - "./cmd"
+    - "./internal"
+    - "./pkg"
+  ignores:
+    - ".*_test\\.go$"
+    - "vendor/.*"
+    - "node_modules/.*"
+    - ".*/example\\.go$"
+
+# Configuração para documentação Kubernetes
+kubernetes:
+  enabled: true
+  paths:
+    - "./deploy"
+  ignores:
+    - ".*\\.bak$"
+    - ".*\\.tmp$"
+
+# Configuração para banco de dados (preparação para futuras implementações)
+databases:
+  enabled: false
+  connections:
+    - name: "main-db"
+      type: "postgres" # ou mysql
+      host: "localhost"
+      port: 5432
+      user: "user"
+      password: "password"
+      database: "dbname"

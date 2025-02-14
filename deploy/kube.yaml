@@ -1,0 +1,97 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-mid-app-config
+  labels:
+    app: my-mid-app
+data:
+  APP_ENV: "production"
+  APP_DEBUG: "false"
+  APP_NAME: "My Mid-Level App"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-mid-app-deployment
+  labels:
+    app: my-mid-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-mid-app
+  template:
+    metadata:
+      labels:
+        app: my-mid-app
+    spec:
+      containers:
+        - name: my-mid-app-container
+          image: nginx:1.19
+          ports:
+            - containerPort: 80
+          env:
+            - name: APP_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: my-mid-app-config
+                  key: APP_ENV
+            - name: APP_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  name: my-mid-app-config
+                  key: APP_DEBUG
+            - name: APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: my-mid-app-config
+                  key: APP_NAME
+          volumeMounts:
+            - name: my-mid-app-logs
+              mountPath: /var/log/my-mid-app
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: my-mid-app-logs
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-mid-app-service
+  labels:
+    app: my-mid-app
+spec:
+  selector:
+    app: my-mid-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-mid-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+    - host: my-mid-app.example.com
+      http:
+        paths:
+          - path: /?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: my-mid-app-service
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - my-mid-app.example.com
+      secretName: my-mid-app-tls

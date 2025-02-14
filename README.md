@@ -1,6 +1,6 @@
-# SuperDoc
+# aimap
 
-SuperDoc é uma ferramenta de linha de comando para gerar documentação automática de projetos Go e Kubernetes.
+aimap é uma ferramenta de linha de comando para gerar documentação automática de projetos Go e Kubernetes.
 
 ## Características
 
@@ -13,7 +13,7 @@ SuperDoc é uma ferramenta de linha de comando para gerar documentação automá
 ## Instalação
 
 ```bash
-go install github.com/seu-usuario/go-super-doc/cmd/superdoc@latest
+go install github.com/edgardnogueira/aimap/cmd/aimap@latest
 ```
 
 ## Uso Rápido
@@ -21,10 +21,10 @@ go install github.com/seu-usuario/go-super-doc/cmd/superdoc@latest
 1. Inicialize um novo projeto:
 
 ```bash
-superdoc init
+aimap init
 ```
 
-2. Ajuste o arquivo `superdoc.yml` gerado conforme necessário:
+2. Ajuste o arquivo `aimap.yml` gerado conforme necessário:
 
 ```yaml
 output:
@@ -49,17 +49,17 @@ kubernetes:
 3. Gere a documentação:
 
 ```bash
-superdoc generate
+aimap generate
 ```
 
 ## Comandos
 
-- `superdoc init`: Cria um arquivo de configuração inicial
-- `superdoc generate`: Gera a documentação
-  - `-config`: Caminho para o arquivo de configuração (padrão: superdoc.yml)
+- `aimap init`: Cria um arquivo de configuração inicial
+- `aimap generate`: Gera a documentação
+  - `-config`: Caminho para o arquivo de configuração (padrão: aimap.yml)
   - `-format`: Formato de saída (sobrescreve o do arquivo de configuração)
   - `-output`: Caminho de saída (sobrescreve o do arquivo de configuração)
-- `superdoc version`: Mostra a versão atual
+- `aimap version`: Mostra a versão atual
 
 ## Configuração
 
