@@ -12,7 +12,7 @@ import (
 
 var (
 	Version   = "dev"
-	BuildTime = "unknown"
+	BuildTime = "now"
 )
 
 func main() {
@@ -37,6 +37,11 @@ func main() {
 	}
 
 	switch os.Args[1] {
+	case "swagger":
+		if err := runSwagger(os.Args[2:]); err != nil {
+			slog.Error("Erro ao executar comando swagger", "error", err)
+			os.Exit(1)
+		}
 	case "init":
 		initCmd.Parse(os.Args[2:])
 		if err := runInit(); err != nil {
@@ -70,6 +75,7 @@ Comandos:
   init      Inicializa um novo projeto com arquivo de configuração
   generate  Gera a documentação baseada na configuração
   version   Mostra a versão do aimap
+  swagger   Gera arquivos .http a partir de um arquivo Swagger/OpenAPI
 
 Execute 'aimap <comando> -h' para mais informações sobre um comando específico.`)
 }
