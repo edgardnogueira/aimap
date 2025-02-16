@@ -1,4 +1,4 @@
-// cmd/aimap/main.go
+// cmd/superdoc/main.go
 package main
 
 import (
@@ -12,7 +12,7 @@ import (
 
 var (
 	Version   = "dev"
-	BuildTime = "now"
+	BuildTime = "unknown"
 )
 
 func main() {
@@ -26,7 +26,7 @@ func main() {
 	generateCmd := flag.NewFlagSet("generate", flag.ExitOnError)
 
 	// Flags para o comando generate
-	configFile := generateCmd.String("config", "aimap.yml", "Caminho para o arquivo de configuração")
+	configFile := generateCmd.String("config", "superdoc.yml", "Caminho para o arquivo de configuração")
 	outputFormat := generateCmd.String("format", "", "Formato de saída (sobrescreve o do arquivo de configuração)")
 	outputPath := generateCmd.String("output", "", "Caminho de saída (sobrescreve o do arquivo de configuração)")
 
@@ -37,6 +37,31 @@ func main() {
 	}
 
 	switch os.Args[1] {
+	case "nextjs":
+		if err := runNextjs(os.Args[2:]); err != nil {
+			slog.Error("Erro ao gerar documentação Next.js", "error", err)
+			os.Exit(1)
+		}
+	case "docker":
+		if err := runDocker(os.Args[2:]); err != nil {
+			slog.Error("Erro ao gerar documentação Docker", "error", err)
+			os.Exit(1)
+		}
+	case "laravel":
+		if err := runLaravel(os.Args[2:]); err != nil {
+			slog.Error("Erro ao gerar documentação Laravel", "error", err)
+			os.Exit(1)
+		}
+	case "mysql":
+		if err := runMySQL(os.Args[2:]); err != nil {
+			slog.Error("Erro ao gerar documentação MySQL", "error", err)
+			os.Exit(1)
+		}
+	case "postgres":
+		if err := runPostgres(os.Args[2:]); err != nil {
+			slog.Error("Erro ao gerar documentação PostgreSQL", "error", err)
+			os.Exit(1)
+		}
 	case "swagger":
 		if err := runSwagger(os.Args[2:]); err != nil {
 			slog.Error("Erro ao executar comando swagger", "error", err)
@@ -57,7 +82,7 @@ func main() {
 		}
 
 	case "version":
-		fmt.Printf("aimap version %s (built at %s)\n", Version, BuildTime)
+		fmt.Printf("superdoc version %s (built at %s)\n", Version, BuildTime)
 
 	default:
 		printUsage()
@@ -66,28 +91,27 @@ func main() {
 }
 
 func printUsage() {
-	fmt.Println(`aimap - Gerador de Documentação para Go e Kubernetes
+	fmt.Println(`superdoc - Gerador de Documentação para Go e Kubernetes
 
 Uso:
-  aimap <comando> [argumentos]
+  superdoc <comando> [argumentos]
 
 Comandos:
   init      Inicializa um novo projeto com arquivo de configuração
   generate  Gera a documentação baseada na configuração
-  version   Mostra a versão do aimap
-  swagger   Gera arquivos .http a partir de um arquivo Swagger/OpenAPI
+  version   Mostra a versão do superdoc
 
-Execute 'aimap <comando> -h' para mais informações sobre um comando específico.`)
+Execute 'superdoc <comando> -h' para mais informações sobre um comando específico.`)
 }
 
 func runInit() error {
-	configPath := "aimap.yml"
+	configPath := "superdoc.yml"
 	if _, err := os.Stat(configPath); err == nil {
 		return fmt.Errorf("arquivo de configuração já existe: %s", configPath)
 	}
 
 	// Template do arquivo de configuração
-	template := `# Configuração do aimap
+	template := `# Configuração do SuperDoc
 output:
   format: "markdown" # Pode ser: html, markdown, json, yaml
   path: "./docs"     # Diretório onde a documentação será gerada
