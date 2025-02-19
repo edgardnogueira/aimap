@@ -158,6 +158,20 @@ seu-projeto/
 - [ ] Suporte a webhooks e eventos
 - [ ] Análise de segurança e conformidade
 
+## Release
+
+goreleaser check # Verifica a configuração
+goreleaser release --snapshot --clean --skip-publish # Teste local
+
+## Commits
+
+Para personalizar as mensagens do changelog, siga o padrão de commits convencional:
+
+feat: nova funcionalidade
+fix: correção de bug
+docs: atualização de documentação
+ci: mudanças no CI
+
 ## Contribuindo
 
 Contribuições são bem-vindas! Por favor, sinta-se à vontade para submeter pull requests.

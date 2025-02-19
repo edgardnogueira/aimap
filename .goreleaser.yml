@@ -1,4 +1,4 @@
-project_name: go-super-doc
+project_name: aimap
 
 before:
   hooks:
@@ -14,7 +14,7 @@ builds:
     goarch:
       - amd64
       - arm64
-    main: ./cmd/go-super-doc
+    main: ./cmd/aimap
     ldflags:
       - -s -w
       - -X main.version={{.Version}}
@@ -48,3 +48,8 @@ changelog:
       - "^ci:"
       - Merge pull request
       - Merge branch
+
+release:
+  github:
+    owner: edgardnogueira
+    name: aimap
