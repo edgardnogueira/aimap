@@ -172,6 +172,8 @@ fix: correção de bug
 docs: atualização de documentação
 ci: mudanças no CI
 
+https://github.com/edgardnogueira/aimap/releases
+
 ## Contribuindo
 
 Contribuições são bem-vindas! Por favor, sinta-se à vontade para submeter pull requests.
